@@ -1,0 +1,40 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "Áo thun",
+            "img": "image-1.png",
+            "genderCategories": "males"
+        },
+        {
+            "id": 2,
+            "name": "Áo sơ mi",
+            "img": "image-2.png",
+            "genderCategories": "males"
+        },
+        {
+            "id": 3,
+            "name": "Áo khoác",
+            "img": "image-3.png",
+            "genderCategories": "males"
+        },
+        {
+            "id": 4,
+            "name": "Quần short",
+            "img": "image-4.png",
+            "genderCategories": "males"
+        },
+        {
+            "id": 5,
+            "name": "Áo polo",
+            "img": "image-11.png",
+            "genderCategories": "males"
+        },
+        {
+            "id": 6,
+            "name": "Váy",
+            "img": "image-11.png",
+            "genderCategories": "females"
+        }
+    ]
+}
