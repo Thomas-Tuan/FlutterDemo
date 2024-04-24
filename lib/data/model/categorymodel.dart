@@ -1,29 +1,29 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class Category {
   int? id;
   String? name;
+  String? des;
   String? img;
-  GenderCategories? genderCategories;
 
   Category({
     this.id,
     this.name,
+    this.des,
     this.img,
-    this.genderCategories,
   });
 
   Category.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    img = json['img'];
-    genderCategories =
-        getGenderCategoryFromString(json['genderCategories'] as String);
+    des = json['description'];
+    img = json['imageURL'];
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
-    data['img'] = img;
-    data['genderCategories'] = genderCategories.toString().split('.').last;
+    data['description'] = des;
+    data['imageURL'] = img;
     return data;
   }
 }
@@ -34,13 +34,17 @@ enum GenderCategories {
   kids,
 }
 
-GenderCategories getGenderCategoryFromString(String categoryString) {
-  switch (categoryString) {
-    case 'kids':
-      return GenderCategories.kids;
-    case 'females':
-      return GenderCategories.females;
-    default:
-      return GenderCategories.males;
+extension GenderCategoriesExtension on GenderCategories {
+  String get displayName {
+    switch (this) {
+      case GenderCategories.males:
+        return 'nam';
+      case GenderCategories.females:
+        return 'nữ';
+      case GenderCategories.kids:
+        return 'trẻ em';
+      default:
+        return 'nam';
+    }
   }
 }

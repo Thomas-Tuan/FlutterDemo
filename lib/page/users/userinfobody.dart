@@ -6,6 +6,7 @@ Widget itemMenuList(String imageUrl, String text, BuildContext context) {
       Image.asset(
         imageUrl,
         width: 50,
+        color: Theme.of(context).colorScheme.tertiary,
       ),
       const SizedBox(
         height: 10,

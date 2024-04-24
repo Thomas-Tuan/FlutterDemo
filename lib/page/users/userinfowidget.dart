@@ -1,19 +1,43 @@
-import 'package:flutter/material.dart';
-import 'package:myapp/component/my_background_gradient.dart';
-import 'package:myapp/conf/const.dart';
-import 'package:myapp/page/users/userinfobody.dart';
+import 'dart:convert';
 
-class MyAccountWidget extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:myapp/component/my_app_bar.dart';
+import 'package:myapp/component/my_background_gradient.dart';
+import 'package:myapp/component/my_drawer.dart';
+import 'package:myapp/conf/const.dart';
+import 'package:myapp/data/model/user.dart';
+import 'package:myapp/page/users/detail/user_info_detail.dart';
+import 'package:myapp/page/users/userinfobody.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class MyAccountWidget extends StatefulWidget {
   const MyAccountWidget({super.key});
+
+  @override
+  State<MyAccountWidget> createState() => _MyAccountWidgetState();
+}
+
+class _MyAccountWidgetState extends State<MyAccountWidget> {
+  User user = User.userEmpty();
+
+  getDataUser() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String strUser = pref.getString('user')!;
+    user = User.fromJson(jsonDecode(strUser));
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getDataUser();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Thông tin cá nhân"),
-        centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
+      appBar: MyAppBar(),
+      drawer: const MyDrawer(),
       body: GradientBackground(
         child: SingleChildScrollView(
           child: Container(
@@ -39,11 +63,36 @@ class MyAccountWidget extends StatelessWidget {
                       width: 10,
                     ),
                     Text(
-                      '',
+                      '${user.fullName}',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.inversePrimary,
                         fontSize: 20,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                    ),
+                    InkWell(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AccountDetailWidget(
+                              objUser: user,
+                            ),
+                          )),
+                      child: Text(
+                        'Cập nhật',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 20,
+                          decoration: TextDecoration.underline,
+                          decorationColor:
+                              Theme.of(context).colorScheme.tertiary,
+                          decorationThickness: 1,
+                          decorationStyle: TextDecorationStyle.solid,
+                        ),
                       ),
                     ),
                   ],

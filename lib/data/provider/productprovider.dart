@@ -1,21 +1,56 @@
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:myapp/api/api.dart';
 import 'package:myapp/data/model/productmodel.dart';
 
-class ReadData {
-  Future<List<Product>> loadData() async {
-    var data = await rootBundle.loadString("assets/files/productlist.json");
-    var dataJson = jsonDecode(data);
-    return (dataJson['data'] as List).map((e) => Product.fromJson(e)).toList();
+class ProductProvider extends ChangeNotifier {
+  List<Product> _product = [];
+  List<Product> get product => _product;
+  ProductProvider() {
+    fetchAllProduct();
+  }
+  Future<void> fetchAllProduct() async {
+    _product = await APIRepository().fetchProduct();
+    notifyListeners();
   }
 
-  Future<Iterable<Product>> loadDataByCat(int catId) async {
-    var data = await rootBundle.loadString("assets/files/productlist.json");
-    var dataJson = jsonDecode(data);
-    return (dataJson['data'] as List)
-        .map((e) => Product.fromJson(e))
-        .where((element) => element.catId == catId)
-        .toList();
+  Future<void> addProduct(
+    String proName,
+    String proDes,
+    File? proImg,
+    double price,
+    int cateId,
+  ) async {
+    await APIRepository().addProduct(
+      proName,
+      proDes,
+      proImg,
+      price,
+      cateId,
+    );
+    await fetchAllProduct();
+  }
+
+  Future<void> editProduct(
+    int id,
+    String proName,
+    String proDes,
+    File? proImg,
+    double price,
+    int cateId,
+    String srcImgPro,
+  ) async {
+    await APIRepository()
+        .editProduct(id, proName, proDes, proImg, price, cateId, srcImgPro);
+    await fetchAllProduct();
+  }
+
+  Future<void> delProduct(
+    int id,
+  ) async {
+    await APIRepository().delProduct(
+      id,
+    );
+    await fetchAllProduct();
   }
 }

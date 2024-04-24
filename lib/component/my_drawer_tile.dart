@@ -12,7 +12,7 @@ class MyDrawerTile extends StatelessWidget {
       padding: const EdgeInsets.only(left: 25.0),
       child: ListTile(
         title: Text(
-          text,
+          text.toUpperCase(),
           style: TextStyle(
               color: Theme.of(context).colorScheme.inversePrimary,
               fontSize: 22),

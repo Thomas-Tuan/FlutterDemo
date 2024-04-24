@@ -1,0 +1,64 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+class Signup {
+  String? accountID;
+  String? numberID;
+  String? password;
+  String? confirmPassword;
+  String? fullName;
+  String? phoneNumber;
+  String? gender;
+  String? birthDay;
+  String? schoolYear;
+  String? schoolKey;
+  String? imageUrl;
+  Signup({
+    required this.accountID,
+    required this.numberID,
+    required this.password,
+    required this.confirmPassword,
+    required this.fullName,
+    required this.phoneNumber,
+    required this.gender,
+    required this.birthDay,
+    required this.schoolKey,
+    required this.schoolYear,
+    required this.imageUrl,
+  });
+}
+
+class ChangePassword {
+  String? password;
+  String? confirmPassword;
+  String? accountID;
+  String? numberID;
+  String? token;
+  ChangePassword({
+    this.password,
+    this.confirmPassword,
+    this.accountID,
+    this.numberID,
+    this.token,
+  });
+}
+
+class UpdateProfile {
+  String? numberID;
+  String? fullName;
+  String? phoneNumber;
+  String? gender;
+  String? birthDay;
+  String schoolKey;
+  String schoolYear;
+  String token;
+
+  UpdateProfile({
+    required this.numberID,
+    required this.fullName,
+    required this.phoneNumber,
+    required this.gender,
+    required this.birthDay,
+    required this.schoolKey,
+    required this.schoolYear,
+    required this.token,
+  });
+}

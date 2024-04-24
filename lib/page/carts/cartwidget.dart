@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/component/my_background_gradient.dart';
 import 'package:myapp/component/my_button.dart';
+import 'package:myapp/conf/common.dart';
 import 'package:myapp/conf/const.dart';
+import 'package:myapp/data/provider/cartprovider.dart';
+import 'package:myapp/page/carts/cartbody.dart';
+import 'package:myapp/page/payments/checkoutwidget.dart';
+import 'package:provider/provider.dart';
 
 class CartWidget extends StatefulWidget {
   const CartWidget({super.key});
@@ -11,134 +16,119 @@ class CartWidget extends StatefulWidget {
 }
 
 class _CartWidgetState extends State<CartWidget> {
-  int quantity = 1;
-
-  void increment() {
-    setState(() {
-      quantity++;
-    });
-  }
-
-  void decrement() {
-    if (quantity > 0) {
-      setState(() {
-        quantity--;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Giỏ hàng"),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Giỏ hàng",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                cartProvider.clearCart();
+              },
+              icon: Image.asset(
+                '$urlCartPageImg' 'trash-can.png',
+                width: 30,
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
+            ),
+          ],
+        ),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Image.asset(
-              '$urlCartPageImg' 'trash-can.png',
-              width: 30,
-              color: Theme.of(context).colorScheme.tertiary,
-            ),
-          ),
+        actions: const [
+          Row(
+            children: [
+              CartIconWithCount(),
+            ],
+          ), // Add the custom component for the cart icon with count
         ],
       ),
-      body: GradientBackground(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(
-                  top: 10,
-                  left: 25,
-                  right: 25,
-                ),
+      body: cartProvider.cartItemCount <= 0
+          ? const Center(
+              child: Text(
+                'Giỏ hàng đang trống !',
+              ),
+            )
+          : GradientBackground(
+              child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Image.asset(
-                          '$urlCartPageImg' 'checked-checkbox.png',
-                          width: 30,
+                    SizedBox(
+                      height: 600,
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                          top: 10,
+                          left: 25,
+                          right: 25,
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Theme.of(context).colorScheme.tertiary,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                          child: Image.asset(
-                            '$urlHomePageImg' 'image-6.png',
-                            width: 100,
-                            height: 150,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Flexible(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Áo Polo nam mắt chim gia đình',
+                        child: ListView.builder(
+                          itemCount: cartProvider.cartItemCount,
+                          itemBuilder: (context, index) {
+                            final product = cartProvider.cart.cartItem[index];
+                            return ListTile(
+                              leading: Image.network(
+                                product.productDetails,
+                              ),
+                              title: Text(
+                                product.productName!,
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 22,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              const Text(
-                                '357.000 đ',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w200,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Xanh/ L",
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .inversePrimary,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              subtitle: Column(
+                                children: [
+                                  Text(
+                                    Common.formatMoneyCurrency(
+                                        product.unitPrice.toString()),
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    const Icon(
-                                        Icons.keyboard_arrow_down_rounded),
-                                  ],
-                                ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      cartProvider.removeItem(index);
+                                    },
+                                    child: Text('Xóa',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 20,
+                                          decoration: TextDecoration.underline,
+                                          decorationColor: Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                          decorationThickness: 1,
+                                          decorationStyle:
+                                              TextDecorationStyle.solid,
+                                        )),
+                                  ),
+                                ],
                               ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Container(
                                     height: 30,
@@ -159,9 +149,10 @@ class _CartWidgetState extends State<CartWidget> {
                                       ],
                                     ),
                                     child: IconButton(
-                                      icon: const Icon(Icons.remove),
-                                      onPressed: decrement,
-                                    ),
+                                        icon: const Icon(Icons.remove),
+                                        onPressed: () {
+                                          cartProvider.decrementQuantity(index);
+                                        }),
                                   ),
                                   const SizedBox(
                                     width: 10,
@@ -172,7 +163,7 @@ class _CartWidgetState extends State<CartWidget> {
                                       vertical: 5,
                                     ),
                                     child: Text(
-                                      '$quantity',
+                                      '${product.quantity}',
                                       style: TextStyle(
                                         fontSize: 16,
                                         color: Theme.of(context)
@@ -203,37 +194,17 @@ class _CartWidgetState extends State<CartWidget> {
                                     ),
                                     child: IconButton(
                                       icon: const Icon(Icons.add),
-                                      onPressed: increment,
+                                      onPressed: () {
+                                        cartProvider.incrementQuantity(index);
+                                      },
                                     ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Container(),
-                                  ),
-                                  Text(
-                                    'Xóa',
-                                    textAlign: TextAlign.end,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .tertiary,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                            );
+                          },
                         ),
-                      ],
+                      ),
                     ),
                     Divider(
                       indent: 10,
@@ -280,9 +251,7 @@ class _CartWidgetState extends State<CartWidget> {
                                 '499.000 đ',
                                 style: TextStyle(
                                   fontSize: 16,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .inversePrimary,
+                                  color: Theme.of(context).colorScheme.tertiary,
                                 ),
                               ),
                             ],
@@ -317,9 +286,7 @@ class _CartWidgetState extends State<CartWidget> {
                                 '392.000 đ',
                                 style: TextStyle(
                                   fontSize: 16,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .inversePrimary,
+                                  color: Theme.of(context).colorScheme.tertiary,
                                 ),
                               ),
                             ],
@@ -330,81 +297,122 @@ class _CartWidgetState extends State<CartWidget> {
                     const SizedBox(
                       height: 10,
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(
-                  left: 25,
-                  right: 25,
-                ),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Image.asset(
-                          '$urlImg' 'voucher.png',
-                          width: 50,
-                        ),
-                        Text(
-                          'Thêm mã giảm giá',
-                          style: TextStyle(
-                            fontSize: 16,
+                    Container(
+                      padding: const EdgeInsets.only(
+                        left: 25,
+                        right: 25,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Image.asset(
+                                '$urlImg' 'voucher.png',
+                                width: 50,
+                              ),
+                              Text(
+                                'Thêm mã giảm giá',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.arrow_forward_ios),
+                                onPressed: () {},
+                              ),
+                            ],
+                          ),
+                          Divider(
                             color: Theme.of(context).colorScheme.inversePrimary,
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_forward_ios),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                    Divider(
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Phí giao hàng',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Theme.of(context).colorScheme.inversePrimary,
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Phí giao hàng',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary,
+                                ),
+                              ),
+                              Text(
+                                '50.000 Đ',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Tổng cộng',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary,
+                                ),
+                              ),
+                              Text(
+                                Common.formatMoneyCurrency(
+                                    cartProvider.totalPrice.toString()),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          MyButton(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const PaymentWidget()));
+                              },
+                              text: "Thanh toán".toUpperCase()),
+                          const SizedBox(
+                            height: 50,
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Tổng cộng',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    MyButton(onTap: () {}, text: "Thanh toán".toUpperCase()),
-                    const SizedBox(
-                      height: 50,
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

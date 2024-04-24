@@ -15,19 +15,39 @@ class MyLocation extends StatelessWidget {
         actions: [
           MaterialButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(
-              "Exit",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.inversePrimary,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 15,
+              ),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                "Exit",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
               ),
             ),
           ),
           MaterialButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(
-              "Save",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.inversePrimary,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 15,
+              ),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                "Save",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
               ),
             ),
           ),

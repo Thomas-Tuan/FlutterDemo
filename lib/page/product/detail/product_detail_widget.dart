@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/component/my_background_gradient.dart';
 import 'package:myapp/conf/common.dart';
-import 'package:myapp/page/product/product_detail_bottom.dart';
-import 'package:myapp/page/product/product_detail_choose_color.dart';
-import 'package:myapp/page/product/product_detail_choose_size.dart';
-import 'package:myapp/page/product/product_detail_slider.dart';
+import 'package:myapp/data/model/productmodel.dart';
+import 'package:myapp/page/product/detail/product_detail_bottom.dart';
+import 'package:myapp/page/product/detail/product_detail_choose_color.dart';
+import 'package:myapp/page/product/detail/product_detail_choose_size.dart';
+import 'package:myapp/page/product/detail/product_detail_slider.dart';
 
 class ProductDetailWidget extends StatefulWidget {
-  const ProductDetailWidget({super.key});
+  final Product objPro;
+  const ProductDetailWidget({Key? key, required this.objPro}) : super(key: key);
 
   @override
   State<ProductDetailWidget> createState() => _ProductDetailWidgetState();
@@ -19,11 +21,11 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
     var myPrimaryTextStyle = TextStyle(
       color: Theme.of(context).colorScheme.inversePrimary,
       fontWeight: FontWeight.bold,
-      fontSize: 18,
+      fontSize: 20,
     );
     var mySecondaryTextStyle = TextStyle(
       color: Theme.of(context).colorScheme.inversePrimary,
-      fontSize: 16,
+      fontSize: 18,
     );
     return Scaffold(
       appBar: AppBar(
@@ -34,8 +36,8 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           IconButton(
             onPressed: () {},
             icon: Icon(
-              Icons.heat_pump_rounded,
-              size: 20,
+              Icons.h_mobiledata_outlined,
+              size: 50,
               color: Theme.of(context).colorScheme.tertiary,
             ),
           ),
@@ -58,8 +60,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Text('Áo Sơ Mi Tay Dài Nữ Suông Kèm Nơ',
-                        style: myPrimaryTextStyle),
+                    Text(widget.objPro.name!, style: myPrimaryTextStyle),
                     const SizedBox(
                       height: 10,
                     ),
@@ -67,7 +68,9 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Text(Common.formatMoneyCurrency('249000'),
+                    Text(
+                        Common.formatMoneyCurrency(
+                            widget.objPro.price.toString()),
                         style: TextStyle(
                           fontSize: 16,
                           color: Theme.of(context).colorScheme.tertiary,
@@ -125,7 +128,10 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                   ],
                 ),
               ),
-              BottomProductDetail(mySecondaryTextStyle: mySecondaryTextStyle),
+              BottomProductDetail(
+                mySecondaryTextStyle: mySecondaryTextStyle,
+                objPro: widget.objPro,
+              ),
             ],
           ),
         ),

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/api/sharepre.dart';
+import 'package:myapp/auth/login_register.dart';
 import 'package:myapp/component/my_drawer_tile.dart';
 import 'package:myapp/conf/const.dart';
 import 'package:myapp/mainpage.dart';
-import 'package:myapp/page/login/loginwidget.dart';
-import 'package:myapp/page/register/registerwidget.dart';
+import 'package:myapp/page/categories/crud_category.dart';
+import 'package:myapp/page/payments/checkoutwidget.dart';
+import 'package:myapp/page/product/crud_product.dart';
 import 'package:myapp/page/settingwidget.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -49,28 +52,44 @@ class MyDrawer extends StatelessWidget {
             color: Theme.of(context).colorScheme.inversePrimary,
           ),
           MyDrawerTile(
-            text: "Đăng ký",
-            icon: Icons.gamepad_sharp,
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const RegisterWidget())),
+            text: "Danh mục",
+            icon: Icons.category_sharp,
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const CRUDCate())),
+          ),
+          Divider(
+            color: Theme.of(context).colorScheme.inversePrimary,
           ),
           MyDrawerTile(
-            text: "Đăng nhập",
-            icon: Icons.signpost_outlined,
+            text: "Sản phẩm",
+            icon: Icons.pages_sharp,
             onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const LoginWidget())),
+                MaterialPageRoute(builder: (context) => const CRUDProduct())),
+          ),
+          Divider(
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
+          MyDrawerTile(
+            text: "acas",
+            icon: Icons.ac_unit_outlined,
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const PaymentWidget())),
+          ),
+          Divider(
+            color: Theme.of(context).colorScheme.inversePrimary,
           ),
           const Spacer(),
           MyDrawerTile(
-            text: "Đăng xuất",
-            icon: Icons.logout,
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const RegisterWidget())),
-          ),
+              text: "Đăng xuất",
+              icon: Icons.logout,
+              onTap: () {
+                logOut(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginOrRegister(),
+                    ));
+              }),
           const SizedBox(
             height: 25,
           ),

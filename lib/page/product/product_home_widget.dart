@@ -1,51 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/api/api.dart';
 import 'package:myapp/data/model/productmodel.dart';
-import 'package:myapp/data/provider/productprovider.dart';
-import 'package:myapp/page/product/product_detail_widget.dart';
 import 'package:myapp/page/product/productbody.dart';
 
 class MyProductList extends StatefulWidget {
-  const MyProductList({super.key});
-
+  const MyProductList({super.key, this.startIndex = 0, this.itemCount = 4});
+  final int startIndex;
+  final int itemCount;
   @override
   State<MyProductList> createState() => _MyProductListState();
 }
 
 class _MyProductListState extends State<MyProductList> {
   List<Product> lstProduct = [];
-  Future<String> loadProductList() async {
-    lstProduct = await ReadData().loadData();
-    return '';
+  bool isLoading = true;
+  Future<void> fetchProduct() async {
+    try {
+      final fetchProduct = await APIRepository().fetchProduct();
+      setState(() {
+        isLoading = false;
+        lstProduct = fetchProduct;
+      });
+    } catch (e) {
+      print('error $e');
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    loadProductList();
+    fetchProduct();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: loadProductList(),
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        return GestureDetector(
-          onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const ProductDetailWidget())),
-          child: SizedBox(
+    final endIndex = (widget.startIndex + widget.itemCount) < lstProduct.length
+        ? widget.startIndex + widget.itemCount
+        : lstProduct.length;
+    return isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : SizedBox(
             height: 200,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: lstProduct
-                  .take(4)
+                  .sublist(widget.startIndex, endIndex)
                   .map((pro) => itemProductView(pro, context))
                   .toList(),
             ),
-          ),
-        );
-      },
-    );
+          );
   }
 }

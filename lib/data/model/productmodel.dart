@@ -12,8 +12,8 @@ class Product {
     id = json['id'];
     name = json['name'];
     price = json['price'];
-    img = json['img'];
-    des = json['des'];
+    img = json['imageURL'];
+    des = json['description'];
     catId = json['catId'];
   }
 
@@ -22,8 +22,8 @@ class Product {
     data['id'] = id;
     data['name'] = name;
     data['price'] = price;
-    data['img'] = img;
-    data['des'] = des;
+    data['imageURL'] = img;
+    data['description'] = des;
     data['catId'] = catId;
     return data;
   }

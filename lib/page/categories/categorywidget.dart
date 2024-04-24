@@ -3,6 +3,7 @@ import 'package:myapp/component/my_app_bar.dart';
 import 'package:myapp/component/my_background_gradient.dart';
 import 'package:myapp/component/my_drawer.dart';
 import 'package:myapp/component/my_tab_bar.dart';
+import 'package:myapp/data/model/categorymodel.dart';
 import 'package:myapp/page/product/product_grid_page.dart';
 
 class CategoryWidget extends StatefulWidget {
@@ -15,11 +16,14 @@ class CategoryWidget extends StatefulWidget {
 class _CategoryWidgetState extends State<CategoryWidget>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
+  bool isLoading = true;
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(
+      length: GenderCategories.values.length,
+      vsync: this,
+    );
   }
 
   @override
