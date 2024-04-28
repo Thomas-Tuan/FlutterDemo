@@ -73,7 +73,10 @@ class _HomeWidgetState extends State<HomeWidget>
       return ListView(
         scrollDirection: Axis.horizontal,
         children: categoryMenu.map((category) {
-          return itemCateHomePage(category, context);
+          return itemCateHomePage(
+            category,
+            context,
+          );
         }).toList(),
       );
     }).toList();
@@ -253,8 +256,7 @@ class _HomeWidgetState extends State<HomeWidget>
                       ),
                     ),
                     const MyProductList(
-                      startIndex: 0,
-                      itemCount: 4,
+                      sortList: 'Asc',
                     ),
                     Divider(
                       indent: 30,
@@ -270,8 +272,7 @@ class _HomeWidgetState extends State<HomeWidget>
                       ),
                     ),
                     const MyProductList(
-                      startIndex: 4,
-                      itemCount: 4,
+                      sortList: 'Desc',
                     ),
                   ],
                 ),

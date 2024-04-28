@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:myapp/conf/common.dart';
 import 'package:myapp/data/model/productmodel.dart';
+import 'package:myapp/data/provider/cartprovider.dart';
+import 'package:myapp/page/carts/cartwidget.dart';
 import 'package:myapp/page/product/detail/product_detail_widget.dart';
 
 Widget itemProductView(Product item, BuildContext context) {
@@ -66,7 +68,8 @@ Widget itemProductView(Product item, BuildContext context) {
   );
 }
 
-Widget itemProductGridView(Product item, BuildContext context) {
+Widget itemProductGridView(
+    Product item, BuildContext context, CartProvider cartProvider) {
   return GestureDetector(
     onTap: () {
       Navigator.push(
@@ -81,12 +84,12 @@ Widget itemProductGridView(Product item, BuildContext context) {
         Column(
           children: [
             Container(
-              width: 170,
-              height: 90,
+              width: 150,
+              height: 85,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: Theme.of(context).colorScheme.tertiary,
+                  color: Theme.of(context).colorScheme.secondary,
                   width: 1,
                 ),
                 boxShadow: [
@@ -96,7 +99,7 @@ Widget itemProductGridView(Product item, BuildContext context) {
                     blurRadius: 5,
                   ),
                 ],
-                color: Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.tertiary,
               ),
               child: Image.network(
                 item.img!,
@@ -114,6 +117,69 @@ Widget itemProductGridView(Product item, BuildContext context) {
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                   color: Theme.of(context).colorScheme.inversePrimary),
+            ),
+            Text(
+              Common.formatMoneyCurrency(item.price!.toString()),
+              softWrap: false,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).colorScheme.tertiary),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Theme.of(context).colorScheme.primary,
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                    offset: const Offset(0, 4),
+                    blurRadius: 5,
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Icon(
+                    Icons.shopping_cart,
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                    size: 32,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      int productId = item.id!;
+                      if (cartProvider.isProductInCart(productId)) {
+                        int productIndex =
+                            cartProvider.getProductIndex(productId);
+                        if (productIndex >= 0) {
+                          cartProvider.incrementQuantity(productIndex);
+                        }
+                      } else {
+                        cartProvider.addItem(item);
+                      }
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CartWidget()));
+                    },
+                    child: Center(
+                      child: Text(
+                        'Mua ngay',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color:
+                                Theme.of(context).colorScheme.inversePrimary),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         )

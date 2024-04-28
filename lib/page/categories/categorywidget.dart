@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/api/api.dart';
 import 'package:myapp/component/my_app_bar.dart';
 import 'package:myapp/component/my_background_gradient.dart';
 import 'package:myapp/component/my_drawer.dart';
 import 'package:myapp/component/my_tab_bar.dart';
 import 'package:myapp/data/model/categorymodel.dart';
-import 'package:myapp/page/product/product_grid_page.dart';
+import 'package:myapp/page/categories/category_grid_page.dart';
 
 class CategoryWidget extends StatefulWidget {
   const CategoryWidget({super.key});
@@ -17,6 +18,20 @@ class _CategoryWidgetState extends State<CategoryWidget>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   bool isLoading = true;
+  List<Category> categoriesList = [];
+
+  Future<void> fetchAllCategories() async {
+    try {
+      final fetchedCategories = await APIRepository().fetchCategories();
+      setState(() {
+        isLoading = false;
+        categoriesList = fetchedCategories;
+      });
+    } catch (e) {
+      setState(() {});
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -24,12 +39,32 @@ class _CategoryWidgetState extends State<CategoryWidget>
       length: GenderCategories.values.length,
       vsync: this,
     );
+    fetchAllCategories();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  List<Category> getCategoryFilter(
+      GenderCategories gender, List<Category> categoriesList) {
+    final expectedDescription = gender.displayName;
+    return categoriesList
+        .where((cate) => cate.des == expectedDescription)
+        .toList();
+  }
+
+  List<Widget> getCategoryList(List<Category> categoriesList) {
+    return GenderCategories.values.map((gender) {
+      List<Category> categoryFilter = getCategoryFilter(gender, categoriesList);
+      return Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10,
+          ),
+          child: MyCategoryGridList(categoryFilter: categoryFilter));
+    }).toList();
   }
 
   @override
@@ -47,14 +82,15 @@ class _CategoryWidgetState extends State<CategoryWidget>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MyTabBar(tabController: _tabController),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    child: const MyProductGridList()),
+                isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : SizedBox(
+                        height: 850,
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: getCategoryList(categoriesList),
+                        ),
+                      ),
               ],
             ),
           ),

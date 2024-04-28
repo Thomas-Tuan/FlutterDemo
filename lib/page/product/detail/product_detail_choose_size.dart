@@ -1,31 +1,23 @@
 import 'package:flutter/material.dart';
 
-class SizeCheckBox extends StatefulWidget {
+class SizeCheckBox extends StatelessWidget {
   final String size;
-  const SizeCheckBox({super.key, required this.size});
+  final String? selectedSize;
+  final ValueChanged<String> onSelect;
 
-  @override
-  State<SizeCheckBox> createState() => _SizeCheckBoxState();
-}
-
-class _SizeCheckBoxState extends State<SizeCheckBox> {
-  List<String> selectedSizes = [];
-  void toggleSizeSelection(String size) {
-    setState(() {
-      if (selectedSizes.contains(size)) {
-        selectedSizes.remove(size);
-      } else {
-        selectedSizes.add(size);
-      }
-    });
-  }
+  const SizeCheckBox({
+    super.key,
+    required this.size,
+    required this.selectedSize,
+    required this.onSelect,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final bool isSelected = selectedSizes.contains(widget.size);
+    final bool isSelected = selectedSize == size;
 
     return GestureDetector(
-      onTap: () => toggleSizeSelection(widget.size),
+      onTap: () => onSelect(size),
       child: Container(
         margin: const EdgeInsets.only(right: 20),
         padding: const EdgeInsets.all(10),
@@ -43,7 +35,7 @@ class _SizeCheckBoxState extends State<SizeCheckBox> {
           ],
         ),
         child: Text(
-          widget.size,
+          size,
           style: TextStyle(
             color: isSelected
                 ? Theme.of(context).colorScheme.primary

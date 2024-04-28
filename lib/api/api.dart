@@ -112,7 +112,8 @@ class APIRepository {
         return "login fail";
       }
     } catch (ex) {
-      rethrow;
+      return "login fail";
+      // rethrow;
     }
   }
 
@@ -158,6 +159,29 @@ class APIRepository {
         return "ok";
       } else {
         return res.data.toString();
+      }
+    } catch (ex) {
+      // ignore: avoid_print
+      print('Error ' '$ex');
+      rethrow;
+    }
+  }
+
+  Future<List<Product>> fetchCategoriesById(int cateId) async {
+    try {
+      User userSession = await getUser();
+      var user = await APIRepository().current(userSession.token!);
+      Response res = await api.sendRequest.get('/Product/getListByCatId',
+          options: Options(headers: header(userSession.token!)),
+          queryParameters: {
+            'AccountID': user.accountId,
+            'categoryID': cateId,
+          });
+      if (res.data is List && res.data.isNotEmpty) {
+        final List<dynamic> data = res.data;
+        return data.map((item) => Product.fromJson(item)).toList();
+      } else {
+        return [];
       }
     } catch (ex) {
       // ignore: avoid_print
@@ -389,6 +413,47 @@ class APIRepository {
         return "ok";
       } else {
         return res.data["data"].toString();
+      }
+    } catch (ex) {
+      // ignore: avoid_print
+      print('Error ' '$ex');
+      rethrow;
+    }
+  }
+
+  Future<String> addBill(List<Map<String, dynamic>> products) async {
+    try {
+      User userSession = await getUser();
+      final body = products;
+      Response res = await api.sendRequest.post(
+        '/Order/addBill',
+        options: Options(headers: header(userSession.token!)),
+        data: body,
+      );
+      if (res.data.toString().contains('Thêm hóa đơn thành công')) {
+        return "ok";
+      } else {
+        return 'failed';
+      }
+    } catch (ex) {
+      // ignore: avoid_print
+      print('Error ' '$ex');
+      rethrow;
+    }
+  }
+
+  Future<List<Product>> fetchBill() async {
+    try {
+      User userSession = await getUser();
+      Response res = await api.sendRequest.get(
+        '/Product/getListAdmin',
+        options: Options(headers: header(userSession.token!)),
+      );
+      if (res.data is List && res.data.isNotEmpty) {
+        final List<dynamic> data = res.data;
+        return data.map((item) => Product.fromJson(item)).toList();
+      } else {
+        return [];
       }
     } catch (ex) {
       // ignore: avoid_print

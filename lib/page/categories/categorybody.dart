@@ -1,45 +1,42 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/conf/common.dart';
 import 'package:myapp/data/model/categorymodel.dart';
-import 'package:myapp/page/categories/categorywidget.dart';
+import 'package:myapp/page/product/productwidget.dart';
 
-Widget itemCateHomePage(Category item, BuildContext context) {
-  return GestureDetector(
-    onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const CategoryWidget(),
-        )),
-    child: Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 10,
-      ),
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 10,
+Widget itemCateHomePage(
+  Category item,
+  BuildContext context,
+) {
+  return Container(
+    margin: const EdgeInsets.symmetric(
+      horizontal: 10,
+    ),
+    child: Column(
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            color: Theme.of(context).colorScheme.primary,
           ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            child: Image.network(
-              item.img!,
-              fit: BoxFit.contain,
-              width: 60,
-              height: 60,
-            ),
+          child: Image.network(
+            item.img!,
+            fit: BoxFit.contain,
+            width: 60,
+            height: 60,
           ),
-          Text(
-            item.name!,
-            style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.inversePrimary),
-          ),
-        ],
-      ),
+        ),
+        Text(
+          item.name!,
+          style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.inversePrimary),
+        ),
+      ],
     ),
   );
 }
@@ -115,4 +112,61 @@ Widget displayImage(BuildContext context, File? imageUrl, String? srcCateImg) {
                   ),
                 ),
         );
+}
+
+Widget itemCategoryGridView(Category item, BuildContext context) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProductWidget(
+                    objCat: item,
+                  )));
+    },
+    child: Column(
+      children: [
+        Column(
+          children: [
+            Container(
+              width: 170,
+              height: 90,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.secondary,
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                    offset: const Offset(0, 4),
+                    blurRadius: 5,
+                  ),
+                ],
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
+              child: Image.network(
+                item.img!,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.image),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              Common.shortText(item.name!, 15),
+              softWrap: false,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).colorScheme.inversePrimary),
+            ),
+          ],
+        )
+      ],
+    ),
+  );
 }

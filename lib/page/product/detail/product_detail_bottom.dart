@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/data/model/productmodel.dart';
 import 'package:myapp/data/provider/cartprovider.dart';
 import 'package:myapp/page/carts/cartwidget.dart';
+import 'package:myapp/page/payments/checkoutwidget.dart';
 import 'package:provider/provider.dart';
 
 class BottomProductDetail extends StatelessWidget {
@@ -40,7 +41,15 @@ class BottomProductDetail extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            cartProvider.addItem(objPro);
+            int productId = objPro.id!;
+            if (cartProvider.isProductInCart(productId)) {
+              int productIndex = cartProvider.getProductIndex(productId);
+              if (productIndex >= 0) {
+                cartProvider.incrementQuantity(productIndex);
+              }
+            } else {
+              cartProvider.addItem(objPro);
+            }
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const CartWidget()));
           },
@@ -77,13 +86,38 @@ class BottomProductDetail extends StatelessWidget {
                 ),
               ),
             ),
-            child: Center(
-              child: Text(
-                'Mua ngay',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                    color: Theme.of(context).colorScheme.secondary),
+            child: GestureDetector(
+              onTap: () {
+                int productId = objPro.id!;
+                if (cartProvider.isProductInCart(productId)) {
+                  int productIndex = cartProvider.getProductIndex(productId);
+                  if (productIndex >= 0) {
+                    cartProvider.incrementQuantity(productIndex);
+                  }
+                } else {
+                  cartProvider.addItem(objPro);
+                }
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            PaymentWidget(objProduct: objPro)));
+              },
+              child: Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        width: 2, color: Theme.of(context).colorScheme.primary),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    'Mua ngay',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                        color: Theme.of(context).colorScheme.secondary),
+                  ),
+                ),
               ),
             ),
           ),

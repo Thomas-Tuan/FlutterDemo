@@ -40,6 +40,24 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  int getProductIndex(int productId) {
+    for (int i = 0; i < _cart.cartItem.length; i++) {
+      if (_cart.cartItem[i].productId == productId) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  bool isProductInCart(int productId) {
+    for (var item in _cart.cartItem) {
+      if (item.productId == productId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   double get totalPrice {
     return _cart.getTotalAmount();
   }

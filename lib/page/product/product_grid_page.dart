@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/api/api.dart';
+import 'package:myapp/data/model/categorymodel.dart';
 import 'package:myapp/data/model/productmodel.dart';
+import 'package:myapp/data/provider/cartprovider.dart';
 import 'package:myapp/page/product/productbody.dart';
+import 'package:provider/provider.dart';
 
 class MyProductGridList extends StatefulWidget {
-  const MyProductGridList({super.key});
+  final Category objCat;
+  const MyProductGridList({Key? key, required this.objCat}) : super(key: key);
 
   @override
   State<MyProductGridList> createState() => _MyProductGridListState();
@@ -13,12 +17,14 @@ class MyProductGridList extends StatefulWidget {
 class _MyProductGridListState extends State<MyProductGridList> {
   List<Product> lstProduct = [];
   bool isLoading = true;
-  Future<void> fetchProduct() async {
+
+  Future<void> fetchProductByCate() async {
     try {
-      final fetchProduct = await APIRepository().fetchProduct();
+      final fetchProductByCate =
+          await APIRepository().fetchCategoriesById(widget.objCat.id!);
       setState(() {
         isLoading = false;
-        lstProduct = fetchProduct;
+        lstProduct = fetchProductByCate;
       });
     } catch (e) {
       setState(() {});
@@ -28,24 +34,41 @@ class _MyProductGridListState extends State<MyProductGridList> {
   @override
   void initState() {
     super.initState();
-    fetchProduct();
+    fetchProductByCate();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 700,
-      child: GridView.builder(
-          itemCount: lstProduct.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            childAspectRatio: 1,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 20,
-            crossAxisCount: 3,
-          ),
-          itemBuilder: (context, idx) {
-            return itemProductGridView(lstProduct[idx], context);
-          }),
-    );
+    final cartProvider = Provider.of<CartProvider>(context);
+    return lstProduct.isEmpty
+        ? Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Danh sách sản phẩm này chưa được thêm vào  !',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                ),
+              ],
+            ),
+          )
+        : SizedBox(
+            height: 700,
+            child: GridView.builder(
+                itemCount: lstProduct.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  childAspectRatio: 1,
+                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 20,
+                  crossAxisCount: 2,
+                ),
+                itemBuilder: (context, idx) {
+                  return itemProductGridView(
+                      lstProduct[idx], context, cartProvider);
+                }),
+          );
   }
 }

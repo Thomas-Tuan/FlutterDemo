@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/api/api.dart';
 import 'package:myapp/component/my_app_bar.dart';
 import 'package:myapp/component/my_background_gradient.dart';
 import 'package:myapp/component/my_drawer.dart';
 import 'package:myapp/conf/const.dart';
+import 'package:myapp/data/model/productmodel.dart';
 import 'package:myapp/data/model/user.dart';
+import 'package:myapp/page/users/detail/user_info_bill.dart';
 import 'package:myapp/page/users/detail/user_info_detail.dart';
 import 'package:myapp/page/users/userinfobody.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,9 +30,20 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
     setState(() {});
   }
 
+  List<Product> lstProduct = [];
+  bool isLoading = true;
+  Future<void> fetchBill() async {
+    final fetchedBill = await APIRepository().fetchBill();
+    setState(() {
+      isLoading = false;
+      lstProduct = fetchedBill;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    fetchBill();
     getDataUser();
   }
 
@@ -117,7 +131,7 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
                           width: 10,
                         ),
                         Text(
-                          '',
+                          isLoading ? '' : lstProduct.length.toString(),
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.inversePrimary,
                             fontSize: 20,
@@ -126,21 +140,28 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          'Lịch sử mua hàng',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.inversePrimary,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const BillWidget()));
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            'Lịch sử mua hàng',
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Icon(Icons.keyboard_arrow_down_rounded),
-                      ],
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Icon(Icons.keyboard_arrow_right_outlined),
+                        ],
+                      ),
                     ),
                   ],
                 ),

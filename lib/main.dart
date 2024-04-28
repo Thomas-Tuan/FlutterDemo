@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/data/provider/cartprovider.dart';
 import 'package:myapp/data/provider/categoryprovider.dart';
+import 'package:myapp/data/provider/favoriteproductprovider.dart';
 import 'package:myapp/data/provider/productprovider.dart';
 import 'package:myapp/page/onboading_page/onboarding_page.dart';
 import 'package:myapp/themes/theme_provider.dart';
@@ -29,6 +30,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => CartProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => FavoriteProductProvider(),
         ),
       ],
       child: MaterialApp(

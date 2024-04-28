@@ -4,9 +4,9 @@ import 'package:myapp/data/model/productmodel.dart';
 import 'package:myapp/page/product/productbody.dart';
 
 class MyProductList extends StatefulWidget {
-  const MyProductList({super.key, this.startIndex = 0, this.itemCount = 4});
-  final int startIndex;
-  final int itemCount;
+  final String sortList;
+  const MyProductList({super.key, required this.sortList});
+
   @override
   State<MyProductList> createState() => _MyProductListState();
 }
@@ -34,20 +34,23 @@ class _MyProductListState extends State<MyProductList> {
 
   @override
   Widget build(BuildContext context) {
-    final endIndex = (widget.startIndex + widget.itemCount) < lstProduct.length
-        ? widget.startIndex + widget.itemCount
-        : lstProduct.length;
     return isLoading
         ? const Center(child: CircularProgressIndicator())
         : SizedBox(
             height: 200,
             child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: lstProduct
-                  .sublist(widget.startIndex, endIndex)
-                  .map((pro) => itemProductView(pro, context))
-                  .toList(),
-            ),
+                scrollDirection: Axis.horizontal,
+                children: widget.sortList.toString().contains('Asc')
+                    ? lstProduct
+                        .take(4)
+                        .map((pro) => itemProductView(pro, context))
+                        .toList()
+                    : lstProduct
+                        .take(4)
+                        .toList()
+                        .reversed
+                        .map((pro) => itemProductView(pro, context))
+                        .toList()),
           );
   }
 }

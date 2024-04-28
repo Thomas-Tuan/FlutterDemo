@@ -10,8 +10,10 @@ import 'package:myapp/api/api.dart';
 import 'package:myapp/auth/login_register.dart';
 import 'package:myapp/conf/common.dart';
 import 'package:myapp/conf/const.dart';
+import 'package:myapp/data/model/productmodel.dart';
 import 'package:myapp/data/model/register_update_model.dart';
 import 'package:myapp/data/model/user.dart';
+import 'package:myapp/data/provider/cartprovider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<bool> saveUser(User objUser) async {
@@ -151,4 +153,34 @@ Future<String> changePasswordForm(
     confirmPassword: confirmPassword,
     token: token,
   ));
+}
+
+Future<String> handleCheckout(
+    Product product, CartProvider cartProvider) async {
+  try {
+    List<Map<String, dynamic>> productList = [];
+    // ignore: unnecessary_null_comparison
+    if (product != null) {
+      productList.add({
+        "productID": product.id,
+        "count": 1,
+      });
+    } else {
+      productList = cartProvider.cart.cartItem.map((item) {
+        return {
+          "productID": item.productId,
+          "count": item.quantity,
+        };
+      }).toList();
+    }
+    String result = await APIRepository().addBill(productList);
+    if (result == "ok") {
+      return "ok";
+    } else {
+      return "failed";
+    }
+  } catch (e) {
+    print('Error with $e');
+    return 'failed';
+  }
 }

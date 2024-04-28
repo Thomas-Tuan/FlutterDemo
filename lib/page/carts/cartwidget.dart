@@ -4,8 +4,8 @@ import 'package:myapp/component/my_button.dart';
 import 'package:myapp/conf/common.dart';
 import 'package:myapp/conf/const.dart';
 import 'package:myapp/data/provider/cartprovider.dart';
-import 'package:myapp/page/carts/cartbody.dart';
-import 'package:myapp/page/payments/checkoutwidget.dart';
+import 'package:myapp/mainpage.dart';
+import 'package:myapp/page/carts/cart_dialog_body.dart';
 import 'package:provider/provider.dart';
 
 class CartWidget extends StatefulWidget {
@@ -19,6 +19,17 @@ class _CartWidgetState extends State<CartWidget> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
+    showDialogCheckout() {
+      showModalBottomSheet(
+          backgroundColor: Colors.transparent,
+          context: context,
+          builder: (context) {
+            return CheckoutView(
+              cartProvider: cartProvider,
+            );
+          });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -30,32 +41,47 @@ class _CartWidgetState extends State<CartWidget> {
                 color: Theme.of(context).colorScheme.inversePrimary,
               ),
             ),
-            IconButton(
-              onPressed: () {
-                cartProvider.clearCart();
-              },
-              icon: Image.asset(
-                '$urlCartPageImg' 'trash-can.png',
-                width: 30,
-                color: Theme.of(context).colorScheme.tertiary,
-              ),
-            ),
           ],
         ),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
-        actions: const [
-          Row(
-            children: [
-              CartIconWithCount(),
-            ],
-          ), // Add the custom component for the cart icon with count
+        actions: [
+          IconButton(
+            onPressed: () {
+              cartProvider.clearCart();
+            },
+            icon: Image.asset(
+              '$urlCartPageImg' 'trash-can.png',
+              width: 30,
+              color: Theme.of(context).colorScheme.tertiary,
+            ),
+          ),
         ],
       ),
       body: cartProvider.cartItemCount <= 0
-          ? const Center(
-              child: Text(
-                'Giỏ hàng đang trống !',
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Giỏ hàng đang trống !',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  MyButton(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Mainpage()));
+                      },
+                      text: "Quay về trang chủ".toUpperCase()),
+                ],
               ),
             )
           : GradientBackground(
@@ -64,7 +90,7 @@ class _CartWidgetState extends State<CartWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 600,
+                      height: 300,
                       child: Container(
                         margin: const EdgeInsets.only(
                           top: 10,
@@ -75,135 +101,149 @@ class _CartWidgetState extends State<CartWidget> {
                           itemCount: cartProvider.cartItemCount,
                           itemBuilder: (context, index) {
                             final product = cartProvider.cart.cartItem[index];
-                            return ListTile(
-                              leading: Image.network(
-                                product.productDetails,
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                vertical: 10,
                               ),
-                              title: Text(
-                                product.productName!,
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .inversePrimary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Column(
-                                children: [
-                                  Text(
-                                    Common.formatMoneyCurrency(
-                                        product.unitPrice.toString()),
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .tertiary,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      cartProvider.removeItem(index);
-                                    },
-                                    child: Text('Xóa',
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .tertiary,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 20,
-                                          decoration: TextDecoration.underline,
-                                          decorationColor: Theme.of(context)
-                                              .colorScheme
-                                              .tertiary,
-                                          decorationThickness: 1,
-                                          decorationStyle:
-                                              TextDecorationStyle.solid,
-                                        )),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.secondary,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .inversePrimary,
+                                    offset: const Offset(0, 4),
+                                    blurRadius: 5,
                                   ),
                                 ],
                               ),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    height: 30,
-                                    // width: 30,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .inversePrimary,
-                                          offset: const Offset(0, 4),
-                                          blurRadius: 5,
+                              child: ListTile(
+                                title: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(product.productName.toString()),
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          padding: EdgeInsets.zero,
+                                          onPressed: () {
+                                            cartProvider
+                                                .decrementQuantity(index);
+                                          },
+                                          icon: Icon(
+                                            Icons.remove_circle_outline,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .inversePrimary,
+                                            size: 24,
+                                          ),
+                                        ),
+                                        Text(
+                                          product.quantity.toString(),
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            cartProvider
+                                                .incrementQuantity(index);
+                                          },
+                                          icon: Icon(
+                                            Icons.add_circle_outline_sharp,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .inversePrimary,
+                                            size: 24,
+                                          ),
                                         ),
                                       ],
-                                    ),
-                                    child: IconButton(
-                                        icon: const Icon(Icons.remove),
-                                        onPressed: () {
-                                          cartProvider.decrementQuantity(index);
-                                        }),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Container(
-                                    height: 30,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 5,
-                                    ),
-                                    child: Text(
-                                      '${product.quantity}',
+                                    )
+                                  ],
+                                ),
+                                subtitle: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      Common.formatMoneyCurrency(
+                                          product.unitPrice.toString()),
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: 20,
                                         color: Theme.of(context)
                                             .colorScheme
-                                            .inversePrimary,
+                                            .tertiary,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Container(
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .inversePrimary,
-                                          offset: const Offset(0, 4),
-                                          blurRadius: 5,
-                                        ),
-                                      ],
-                                    ),
-                                    child: IconButton(
-                                      icon: const Icon(Icons.add),
-                                      onPressed: () {
-                                        cartProvider.incrementQuantity(index);
+                                    InkWell(
+                                      onTap: () {
+                                        cartProvider.removeItem(index);
                                       },
-                                    ),
+                                      child: Container(
+                                        margin:
+                                            const EdgeInsets.only(right: 36),
+                                        child: Text(
+                                          "Xóa",
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .tertiary,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                contentPadding: EdgeInsets.zero,
+                                leading: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    product.productDetails,
                                   ),
-                                ],
+                                ),
+                                titleTextStyle: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .inversePrimary,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
                               ),
                             );
                           },
                         ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(
+                        top: 10,
+                        left: 25,
+                        right: 25,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Thông tin đơn hàng',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.arrow_forward_ios),
+                            onPressed: () {
+                              showDialogCheckout();
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     Divider(
@@ -293,121 +333,6 @@ class _CartWidgetState extends State<CartWidget> {
                           ),
                         ),
                       ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                        left: 25,
-                        right: 25,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Image.asset(
-                                '$urlImg' 'voucher.png',
-                                width: 50,
-                              ),
-                              Text(
-                                'Thêm mã giảm giá',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .inversePrimary,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.arrow_forward_ios),
-                                onPressed: () {},
-                              ),
-                            ],
-                          ),
-                          Divider(
-                            color: Theme.of(context).colorScheme.inversePrimary,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Phí giao hàng',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .inversePrimary,
-                                ),
-                              ),
-                              Text(
-                                '50.000 Đ',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .inversePrimary,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Tổng cộng',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .inversePrimary,
-                                ),
-                              ),
-                              Text(
-                                Common.formatMoneyCurrency(
-                                    cartProvider.totalPrice.toString()),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .inversePrimary,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          MyButton(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const PaymentWidget()));
-                              },
-                              text: "Thanh toán".toUpperCase()),
-                          const SizedBox(
-                            height: 50,
-                          ),
-                        ],
-                      ),
                     ),
                   ],
                 ),

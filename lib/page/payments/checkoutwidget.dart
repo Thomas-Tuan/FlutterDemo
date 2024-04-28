@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/api/sharepre.dart';
+import 'package:myapp/component/my_button.dart';
+import 'package:myapp/conf/common.dart';
 import 'package:myapp/conf/const.dart';
+import 'package:myapp/data/model/productmodel.dart';
+import 'package:myapp/data/provider/cartprovider.dart';
+import 'package:myapp/page/success_widget.dart';
+import 'package:provider/provider.dart';
 
 class PaymentWidget extends StatefulWidget {
-  const PaymentWidget({super.key});
+  final Product? objProduct;
+  const PaymentWidget({super.key, this.objProduct});
 
   @override
   State<PaymentWidget> createState() => _PaymentWidgetState();
 }
 
 class _PaymentWidgetState extends State<PaymentWidget> {
+  final TextEditingController noteController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -29,54 +39,199 @@ class _PaymentWidgetState extends State<PaymentWidget> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Thanh Toán',
-                    style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.inversePrimary),
-                  ),
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      //Chỗ này để chèn hình vào
-                      child: SizedBox(
-                        child: Image.asset(
-                          '$urlCartPageImg' 'image-21.png',
+                widget.objProduct != null
+                    ? Row(
+                        children: [
+                          SizedBox(
+                            child: Image.network(
+                              widget.objProduct?.img ?? '',
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.objProduct?.name.toString() ?? '',
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .inversePrimary,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      Common.formatMoneyCurrency(
+                                        widget.objProduct?.price.toString() ??
+                                            '',
+                                      ),
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .tertiary,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const Text(
+                                      'Số lượng: 1',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    : SizedBox(
+                        height: 300,
+                        child: ListView.builder(
+                          itemCount: cartProvider.cartItemCount,
+                          itemBuilder: (context, index) {
+                            final product = cartProvider.cart.cartItem[index];
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                vertical: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.secondary,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .inversePrimary,
+                                    offset: const Offset(0, 4),
+                                    blurRadius: 5,
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    child: Image.network(
+                                      product.productDetails,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          product.productName.toString(),
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .inversePrimary,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 30,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              Common.formatMoneyCurrency(
+                                                  product.unitPrice.toString()),
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .tertiary,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Số lượng: ${product.quantity.toString()}',
+                                              style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
                       ),
-                    ),
-                    const Expanded(
-                      child: Text(
-                        'Áo Polo Nam \nMàu - Size: Xanh / L \n\n\nGiá: 350:000đ         Số Lượng: 1',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                  ],
+                Divider(
+                  indent: 10,
+                  endIndent: 10,
+                  color: Theme.of(context).colorScheme.tertiary,
                 ),
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Ghi chú",
-                    hintText: "Nhập ghi chú...",
-                    icon: Icon(Icons.note),
+                  controller: noteController,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Theme.of(context).colorScheme.secondary,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        width: 3,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                    ),
+                    hintText: 'Nhập ghi chú',
+                    hintStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      fontWeight: FontWeight.w300,
+                    ),
+                    prefixIcon: Icon(
+                      Icons.note,
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Mã giảm giá",
-                    hintText: "Nhập mã giảm giá...",
-                    icon: Icon(Icons.discount),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset(
+                      '$urlImg' 'voucher.png',
+                      width: 50,
+                    ),
+                    Text(
+                      'Thêm mã giảm giá',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.arrow_forward_ios),
+                      onPressed: () {},
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -131,17 +286,6 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: Text("Tạm tính (1 sản phẩm)"),
-                    ),
-                    Expanded(
-                      child: Text(textAlign: TextAlign.right, "357.000đ"),
-                    ),
-                  ],
-                ),
-                const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
                       child: Text("Mã giảm giá"),
                     ),
                     Expanded(
@@ -156,14 +300,14 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                       child: Text("Phí giao hàng"),
                     ),
                     Expanded(
-                      child: Text(textAlign: TextAlign.right, "20.000đ"),
+                      child: Text(textAlign: TextAlign.right, "50.000đ"),
                     ),
                   ],
                 ),
-                const Row(
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: Text('Tổng tiền thanh toán',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -171,10 +315,11 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                     ),
                     Expanded(
                       child: Text(
+                        Common.formatMoneyCurrency(
+                            (cartProvider.totalPrice + 50000).toString()),
                         textAlign: TextAlign.right,
-                        '377.000d',
                         style: TextStyle(
-                          color: Colors.red,
+                          color: Theme.of(context).colorScheme.tertiary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -182,23 +327,26 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                   ],
                 ),
                 const SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        Theme.of(context).colorScheme.primary),
-                    minimumSize: MaterialStateProperty.all(const Size(350, 50)),
-                    elevation: MaterialStateProperty.all<double>(10.0),
-                    // Thiết lập khoảng cách nội dung của nút đến viền
-                    padding:
-                        MaterialStateProperty.all(const EdgeInsets.all(10)),
-                    // Các thuộc tính khác tùy chỉnh nút
-                  ),
-                  child: Text(
-                    'Thanh Toán',
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary),
-                  ),
+                MyButton(
+                  onTap: () async {
+                    String res =
+                        await handleCheckout(widget.objProduct!, cartProvider);
+                    if (res.contains('ok')) {
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SuccessPage(
+                              ojbPro: widget.objProduct,
+                              message:
+                                  "Đơn hàng của bạn đã được đặt thành công !",
+                              additionalInfo:
+                                  "Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi !",
+                            ),
+                          ));
+                    }
+                  },
+                  text: 'Thanh Toán',
                 )
               ],
             ),

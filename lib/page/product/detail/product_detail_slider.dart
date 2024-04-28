@@ -17,10 +17,10 @@ class _ProductDetailCarouselSliderState
   late CarouselController carouselController;
   int innerCurrentPage = 0;
   List<String> lstImg = [
-    '$urlProductImg' 'image-14.png',
-    '$urlProductImg' 'image-15.png',
-    '$urlProductImg' 'image-25.png',
-    '$urlProductImg' 'image-27.png',
+    '$urlProductImg' 'image 85.png',
+    '$urlProductImg' 'image 86.png',
+    '$urlProductImg' 'image 87.png',
+    '$urlProductImg' 'image 88.png',
   ];
 
   @override
