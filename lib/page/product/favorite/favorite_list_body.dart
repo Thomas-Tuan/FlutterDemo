@@ -19,7 +19,7 @@ class FavoriteProductList extends StatelessWidget {
                 Text(
                   'Chưa có danh sách sản phẩm yêu thích !',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     color: Theme.of(context).colorScheme.inversePrimary,
                   ),
                 ),
@@ -42,14 +42,14 @@ class FavoriteProductList extends StatelessWidget {
                     product.name!,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.inversePrimary,
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   subtitle: Text(
                     Common.formatMoneyCurrency(product.price.toString()),
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       color: Theme.of(context).colorScheme.tertiary,
                       fontWeight: FontWeight.bold,
                     ),

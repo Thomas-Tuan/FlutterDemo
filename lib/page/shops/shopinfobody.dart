@@ -22,8 +22,9 @@ class MyInfoShop extends StatelessWidget {
                     flex: 1,
                     child: Container(
                       decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondary,
                         border: Border.all(
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).colorScheme.tertiary,
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(15),
@@ -40,8 +41,9 @@ class MyInfoShop extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.only(right: 20),
                       decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondary,
                         border: Border.all(
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).colorScheme.tertiary,
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(15),
@@ -62,8 +64,9 @@ class MyInfoShop extends StatelessWidget {
                     flex: 1,
                     child: Container(
                       decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondary,
                         border: Border.all(
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).colorScheme.tertiary,
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(15),
@@ -80,8 +83,9 @@ class MyInfoShop extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.only(right: 20),
                       decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondary,
                         border: Border.all(
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).colorScheme.tertiary,
                           width: 2,
                         ),
                         borderRadius: BorderRadius.circular(15),

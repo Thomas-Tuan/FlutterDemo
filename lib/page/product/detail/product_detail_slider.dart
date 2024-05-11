@@ -36,9 +36,10 @@ class _ProductDetailCarouselSliderState
         Stack(
           children: [
             Container(
+              height: 400,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.secondary,
                 boxShadow: [
                   BoxShadow(
                     color: Theme.of(context).colorScheme.inversePrimary,
@@ -53,6 +54,7 @@ class _ProductDetailCarouselSliderState
                   return Builder(builder: (BuildContext context) {
                     return SizedBox(
                       width: double.infinity,
+                      height: double.infinity,
                       child: Image.asset(
                         item,
                         fit: BoxFit.contain,
@@ -73,7 +75,7 @@ class _ProductDetailCarouselSliderState
             ),
             Positioned(
               left: 10,
-              top: 100,
+              top: 170,
               child: CircleAvatar(
                 backgroundColor: Theme.of(context)
                     .colorScheme
@@ -92,7 +94,7 @@ class _ProductDetailCarouselSliderState
             ),
             Positioned(
               right: 10,
-              top: 100,
+              top: 170,
               child: CircleAvatar(
                 backgroundColor: Theme.of(context)
                     .colorScheme

@@ -155,24 +155,34 @@ Future<String> changePasswordForm(
   ));
 }
 
-Future<String> handleCheckout(
-    Product product, CartProvider cartProvider) async {
+Future<String> handleCheckoutOneItem(Product? product) async {
   try {
     List<Map<String, dynamic>> productList = [];
-    // ignore: unnecessary_null_comparison
-    if (product != null) {
-      productList.add({
-        "productID": product.id,
-        "count": 1,
-      });
+    productList.add({
+      "productID": product?.id,
+      "count": 1,
+    });
+    String result = await APIRepository().addBill(productList);
+    if (result == "ok") {
+      return "ok";
     } else {
-      productList = cartProvider.cart.cartItem.map((item) {
-        return {
-          "productID": item.productId,
-          "count": item.quantity,
-        };
-      }).toList();
+      return "failed";
     }
+  } catch (e) {
+    print('Error with $e');
+    return 'failed';
+  }
+}
+
+Future<String> handleCheckout(CartProvider cartProvider) async {
+  try {
+    List<Map<String, dynamic>> productList = [];
+    productList = cartProvider.cart.cartItem.map((item) {
+      return {
+        "productID": item.productId,
+        "count": item.quantity,
+      };
+    }).toList();
     String result = await APIRepository().addBill(productList);
     if (result == "ok") {
       return "ok";

@@ -13,13 +13,13 @@ class MyShopDes extends StatelessWidget {
     var mySecondaryTextStyle = TextStyle(
       color: Theme.of(context).colorScheme.inversePrimary,
       fontWeight: FontWeight.bold,
-      fontSize: 16,
+      fontSize: 18,
     );
 
     return Container(
       decoration: BoxDecoration(
-          border: Border.all(color: Theme.of(context).colorScheme.primary),
-          borderRadius: BorderRadius.circular(8)),
+          border: Border.all(color: Theme.of(context).colorScheme.tertiary),
+          borderRadius: BorderRadius.circular(12)),
       padding: const EdgeInsets.all(25),
       margin: const EdgeInsets.only(
         left: 25,

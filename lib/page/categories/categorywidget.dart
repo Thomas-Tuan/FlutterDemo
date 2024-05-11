@@ -5,6 +5,7 @@ import 'package:myapp/component/my_background_gradient.dart';
 import 'package:myapp/component/my_drawer.dart';
 import 'package:myapp/component/my_tab_bar.dart';
 import 'package:myapp/data/model/categorymodel.dart';
+import 'package:myapp/data/model/productmodel.dart';
 import 'package:myapp/page/categories/category_grid_page.dart';
 
 class CategoryWidget extends StatefulWidget {
@@ -19,7 +20,9 @@ class _CategoryWidgetState extends State<CategoryWidget>
   late TabController _tabController;
   bool isLoading = true;
   List<Category> categoriesList = [];
-
+  List<Product> lstProduct = [];
+  List<Product> filteredProducts = [];
+  TextEditingController searchController = TextEditingController();
   Future<void> fetchAllCategories() async {
     try {
       final fetchedCategories = await APIRepository().fetchCategories();
@@ -52,7 +55,8 @@ class _CategoryWidgetState extends State<CategoryWidget>
       GenderCategories gender, List<Category> categoriesList) {
     final expectedDescription = gender.displayName;
     return categoriesList
-        .where((cate) => cate.des == expectedDescription)
+        .where((cate) =>
+            cate.des.toString().toLowerCase().contains(expectedDescription))
         .toList();
   }
 
@@ -67,10 +71,23 @@ class _CategoryWidgetState extends State<CategoryWidget>
     }).toList();
   }
 
+  void _applySearchFilter() {
+    final searchText = searchController.text.toLowerCase();
+    setState(() {
+      filteredProducts = lstProduct.where((product) {
+        bool matchesName = product.name!.toLowerCase().contains(searchText);
+        return matchesName;
+      }).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: MyAppBar(
+        nameController: searchController,
+        onSearch: (_) => _applySearchFilter(),
+      ),
       drawer: const MyDrawer(),
       body: GradientBackground(
         child: SingleChildScrollView(

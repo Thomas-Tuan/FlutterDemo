@@ -35,7 +35,12 @@ class _SettingWidgetState extends State<SettingWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Cài đặt"),
+        title: Text(
+          "Cài đặt",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
+        ),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),

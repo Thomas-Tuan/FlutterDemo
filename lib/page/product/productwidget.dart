@@ -3,6 +3,7 @@ import 'package:myapp/component/my_app_bar.dart';
 import 'package:myapp/component/my_background_gradient.dart';
 import 'package:myapp/component/my_drawer.dart';
 import 'package:myapp/data/model/categorymodel.dart';
+import 'package:myapp/data/model/productmodel.dart';
 import 'package:myapp/page/product/product_grid_page.dart';
 
 class ProductWidget extends StatefulWidget {
@@ -15,15 +16,31 @@ class ProductWidget extends StatefulWidget {
 
 class _ProductWidgetState extends State<ProductWidget> {
   bool isLoading = true;
+  List<Product> lstProduct = [];
+  List<Product> filteredProducts = [];
+  TextEditingController searchController = TextEditingController();
   @override
   void initState() {
     super.initState();
   }
 
+  void _applySearchFilter() {
+    final searchText = searchController.text.toLowerCase();
+    setState(() {
+      filteredProducts = lstProduct.where((product) {
+        bool matchesName = product.name!.toLowerCase().contains(searchText);
+        return matchesName;
+      }).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: MyAppBar(
+        nameController: searchController,
+        onSearch: (_) => _applySearchFilter(),
+      ),
       drawer: const MyDrawer(),
       body: GradientBackground(
         child: SingleChildScrollView(
@@ -34,33 +51,6 @@ class _ProductWidgetState extends State<ProductWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(
-                      context,
-                    );
-                  },
-                  child: Center(
-                    child: Text(
-                      'Quay về danh mục'.toUpperCase(),
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.tertiary,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 20,
-                        decoration: TextDecoration.underline,
-                        decorationColor: Theme.of(context).colorScheme.tertiary,
-                        decorationThickness: 1,
-                        decorationStyle: TextDecorationStyle.solid,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
                 Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10,

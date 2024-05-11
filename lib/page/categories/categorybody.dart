@@ -21,7 +21,7 @@ Widget itemCateHomePage(
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
-            color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.secondary,
           ),
           child: Image.network(
             item.img!,
@@ -31,9 +31,9 @@ Widget itemCateHomePage(
           ),
         ),
         Text(
-          item.name!,
+          Common.shortText(item.name!, 10),
           style: TextStyle(
-              fontSize: 16,
+              fontSize: 18,
               color: Theme.of(context).colorScheme.inversePrimary),
         ),
       ],
@@ -130,7 +130,7 @@ Widget itemCategoryGridView(Category item, BuildContext context) {
           children: [
             Container(
               width: 170,
-              height: 90,
+              height: 80,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
@@ -144,7 +144,7 @@ Widget itemCategoryGridView(Category item, BuildContext context) {
                     blurRadius: 5,
                   ),
                 ],
-                color: Theme.of(context).colorScheme.tertiary,
+                color: Theme.of(context).colorScheme.primary,
               ),
               child: Image.network(
                 item.img!,
@@ -160,7 +160,7 @@ Widget itemCategoryGridView(Category item, BuildContext context) {
               Common.shortText(item.name!, 15),
               softWrap: false,
               style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: Theme.of(context).colorScheme.inversePrimary),
             ),

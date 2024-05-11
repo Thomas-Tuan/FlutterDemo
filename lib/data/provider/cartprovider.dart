@@ -5,7 +5,7 @@ import 'package:myapp/data/model/productmodel.dart';
 class CartProvider extends ChangeNotifier {
   final FlutterCart _cart = FlutterCart();
 
-  FlutterCart get cart => _cart; // Provide access to the FlutterCart instance
+  FlutterCart get cart => _cart;
 
   int get cartItemCount => _cart.getCartItemCount();
 

@@ -31,26 +31,30 @@ class _ColorSelectState extends State<ColorSelect> {
               ),
             ],
           ),
-          child: DropdownButton<String>(
-            value: selectedColor ?? 'Đen',
-            items: <String>['Vàng', 'Tím', 'Trắng', 'Đen']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    value,
-                    style: const TextStyle(fontSize: 16),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: selectedColor ?? 'Đen',
+              items: <String>['Vàng', 'Tím', 'Trắng', 'Đen']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      child: Text(
+                        value,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
                   ),
-                ),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              setState(() {
-                selectedColor = newValue;
-              });
-            },
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedColor = newValue;
+                });
+              },
+            ),
           ),
         ),
       ],

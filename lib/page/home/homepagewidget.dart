@@ -7,7 +7,9 @@ import 'package:myapp/component/my_drawer.dart';
 import 'package:myapp/component/my_tab_bar.dart';
 import 'package:myapp/conf/const.dart';
 import 'package:myapp/data/model/categorymodel.dart';
+import 'package:myapp/data/model/productmodel.dart';
 import 'package:myapp/page/categories/categorybody.dart';
+import 'package:myapp/page/home/product_filter_body.dart';
 import 'package:myapp/page/product/product_home_widget.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -22,11 +24,14 @@ class _HomeWidgetState extends State<HomeWidget>
   late TabController _tabController;
   List<Category> categoriesList = [];
   List<String> lstImg = [
-    '$urlHomePageImg' 'banner.png',
+    '$urlHomePageImg' 'banner1.jpg',
     '$urlHomePageImg' 'banner2.png',
     '$urlHomePageImg' 'banner3.png',
   ];
   bool isLoading = true;
+  List<Product> lstProduct = [];
+  List<Product> filteredProducts = [];
+  TextEditingController searchController = TextEditingController();
 
   late CarouselController carouselController;
   int innerCurrentPage = 0;
@@ -40,6 +45,16 @@ class _HomeWidgetState extends State<HomeWidget>
     } catch (e) {
       setState(() {});
     }
+  }
+
+  void _applySearchFilter() {
+    final searchText = searchController.text.toLowerCase();
+    setState(() {
+      filteredProducts = lstProduct.where((product) {
+        bool matchesName = product.name!.toLowerCase().contains(searchText);
+        return matchesName;
+      }).toList();
+    });
   }
 
   @override
@@ -59,11 +74,16 @@ class _HomeWidgetState extends State<HomeWidget>
     super.dispose();
   }
 
+  void _openEndDrawer(BuildContext context) {
+    Scaffold.of(context).openEndDrawer();
+  }
+
   List<Category> getCategoryFilter(
       GenderCategories gender, List<Category> categoriesList) {
-    final expectedDescription = gender.displayName;
+    final expectedDescription = gender.displayName.toLowerCase();
     return categoriesList
-        .where((cate) => cate.des == expectedDescription)
+        .where((cate) =>
+            cate.des.toString().toLowerCase().contains(expectedDescription))
         .toList();
   }
 
@@ -85,8 +105,12 @@ class _HomeWidgetState extends State<HomeWidget>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: MyAppBar(
+        nameController: searchController,
+        onSearch: (_) => _applySearchFilter(),
+      ),
       drawer: const MyDrawer(),
+      endDrawer: const FilterProductDrawer(),
       body: GradientBackground(
         child: SingleChildScrollView(
           child: Column(
@@ -121,7 +145,7 @@ class _HomeWidgetState extends State<HomeWidget>
                                   width: double.infinity,
                                   child: Image.asset(
                                     item,
-                                    fit: BoxFit.contain,
+                                    fit: BoxFit.cover,
                                   ),
                                 );
                               });
@@ -231,21 +255,54 @@ class _HomeWidgetState extends State<HomeWidget>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Chương trình khuyến mãi',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Chương trình khuyến mãi',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              'Bộ lọc',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
+                              ),
+                            ),
+                            Builder(builder: (context) {
+                              return IconButton(
+                                icon: Icon(
+                                  Icons.filter_alt,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary,
+                                ),
+                                onPressed: () => _openEndDrawer(context),
+                              );
+                            }),
+                          ],
+                        ),
+                      ],
                     ),
                     SizedBox(
                       width: 90,
                       height: 90,
                       child: Image.asset(
-                        '$urlHomePageImg' 'image-5.png',
+                        '$urlHomePageImg' 'coupon.png',
                         fit: BoxFit.cover,
                       ),
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     Text(
                       'Hàng mới về',
@@ -254,6 +311,9 @@ class _HomeWidgetState extends State<HomeWidget>
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.inversePrimary,
                       ),
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     const MyProductList(
                       sortList: 'Asc',
@@ -270,6 +330,9 @@ class _HomeWidgetState extends State<HomeWidget>
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.inversePrimary,
                       ),
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     const MyProductList(
                       sortList: 'Desc',

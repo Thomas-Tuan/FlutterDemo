@@ -13,10 +13,4 @@ List<OnBoardingModel> onBoarding = [
     subTitle: 'Luôn đặt sự hài lòng của khách hàng là ưu tiên hàng đầu',
     image: '$urlOnboardingImg' 'onboard-banner-2.gif',
   ),
-  OnBoardingModel(
-    title: 'Được trải nghiệm dịch vụ mua sắm ',
-    subTitle:
-        'Nhân viên tích cực, thân thiện và luôn sẵn sàng tiếp đón khách hàng',
-    image: '$urlOnboardingImg' 'onboard-banner-3.gif',
-  ),
 ];

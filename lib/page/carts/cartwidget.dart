@@ -32,16 +32,11 @@ class _CartWidgetState extends State<CartWidget> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Giỏ hàng",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.inversePrimary,
-              ),
-            ),
-          ],
+        title: Text(
+          "Giỏ hàng",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
         ),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -143,7 +138,7 @@ class _CartWidgetState extends State<CartWidget> {
                                         Text(
                                           product.quantity.toString(),
                                           style: const TextStyle(
-                                              fontSize: 20,
+                                              fontSize: 18,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         IconButton(
@@ -171,7 +166,7 @@ class _CartWidgetState extends State<CartWidget> {
                                       Common.formatMoneyCurrency(
                                           product.unitPrice.toString()),
                                       style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 18,
                                         color: Theme.of(context)
                                             .colorScheme
                                             .tertiary,
@@ -188,11 +183,12 @@ class _CartWidgetState extends State<CartWidget> {
                                         child: Text(
                                           "Xóa",
                                           style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .tertiary,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .tertiary,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
                                         ),
                                       ),
                                     )
@@ -209,7 +205,7 @@ class _CartWidgetState extends State<CartWidget> {
                                     color: Theme.of(context)
                                         .colorScheme
                                         .inversePrimary,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold),
                               ),
                             );
@@ -229,7 +225,7 @@ class _CartWidgetState extends State<CartWidget> {
                           Text(
                             'Thông tin đơn hàng',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 18,
                               color:
                                   Theme.of(context).colorScheme.inversePrimary,
                             ),
@@ -258,7 +254,7 @@ class _CartWidgetState extends State<CartWidget> {
                       'CÓ THỂ BẠN MUỐN MUA',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: 18,
                         color: Theme.of(context).colorScheme.inversePrimary,
                       ),
                     ),
@@ -278,7 +274,7 @@ class _CartWidgetState extends State<CartWidget> {
                               Text(
                                 'Quần Âu nam cao cấp giữ phom, co giãn thoải mái',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 18,
                                   color: Theme.of(context)
                                       .colorScheme
                                       .inversePrimary,
@@ -290,7 +286,7 @@ class _CartWidgetState extends State<CartWidget> {
                               Text(
                                 '499.000 đ',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 18,
                                   color: Theme.of(context).colorScheme.tertiary,
                                 ),
                               ),
@@ -313,7 +309,7 @@ class _CartWidgetState extends State<CartWidget> {
                               Text(
                                 'Áo polo nữ thể thao Airycool Basic, thoáng mát',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 18,
                                   color: Theme.of(context)
                                       .colorScheme
                                       .inversePrimary,
@@ -325,7 +321,7 @@ class _CartWidgetState extends State<CartWidget> {
                               Text(
                                 '392.000 đ',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 18,
                                   color: Theme.of(context).colorScheme.tertiary,
                                 ),
                               ),

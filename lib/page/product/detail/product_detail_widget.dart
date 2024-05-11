@@ -118,35 +118,33 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                   ),
                   Row(
                     children: [
-                      SizeCheckBox(
-                        size: 'S',
-                        selectedSize: selectedSize,
-                        onSelect: selectSize,
+                      Expanded(
+                        child: SizeCheckBox(
+                          size: 'L',
+                          selectedSize: selectedSize,
+                          onSelect: selectSize,
+                        ),
                       ),
-                      SizeCheckBox(
-                        size: 'M',
-                        selectedSize: selectedSize,
-                        onSelect: selectSize,
+                      Expanded(
+                        child: SizeCheckBox(
+                          size: 'XL',
+                          selectedSize: selectedSize,
+                          onSelect: selectSize,
+                        ),
                       ),
-                      SizeCheckBox(
-                        size: 'L',
-                        selectedSize: selectedSize,
-                        onSelect: selectSize,
+                      Expanded(
+                        child: SizeCheckBox(
+                          size: 'XXL',
+                          selectedSize: selectedSize,
+                          onSelect: selectSize,
+                        ),
                       ),
-                      SizeCheckBox(
-                        size: 'XL',
-                        selectedSize: selectedSize,
-                        onSelect: selectSize,
-                      ),
-                      SizeCheckBox(
-                        size: 'XXL',
-                        selectedSize: selectedSize,
-                        onSelect: selectSize,
-                      ),
-                      SizeCheckBox(
-                        size: '3XL',
-                        selectedSize: selectedSize,
-                        onSelect: selectSize,
+                      Expanded(
+                        child: SizeCheckBox(
+                          size: '3XL',
+                          selectedSize: selectedSize,
+                          onSelect: selectSize,
+                        ),
                       ),
                     ],
                   ),

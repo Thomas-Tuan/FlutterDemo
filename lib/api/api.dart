@@ -128,7 +128,7 @@ class APIRepository {
       if (res.data["success"] != false) {
         return "ok";
       } else {
-        return res.data.toString();
+        return "login fail";
       }
     } catch (ex) {
       // ignore: avoid_print
@@ -158,7 +158,7 @@ class APIRepository {
       if (res.data["success"] != false) {
         return "ok";
       } else {
-        return res.data.toString();
+        return "login fail";
       }
     } catch (ex) {
       // ignore: avoid_print

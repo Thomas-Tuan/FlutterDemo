@@ -34,7 +34,6 @@ class SuccessPage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Icon(
                 Icons.check_circle_outline,
@@ -88,7 +87,7 @@ class SuccessPage extends StatelessWidget {
                                       ojbPro.price.toString(),
                                     ),
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 18,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .tertiary,
@@ -98,7 +97,7 @@ class SuccessPage extends StatelessWidget {
                                   const Text(
                                     'Số lượng: 1',
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ],
@@ -164,7 +163,7 @@ class SuccessPage extends StatelessWidget {
                                             Common.formatMoneyCurrency(
                                                 product.unitPrice.toString()),
                                             style: TextStyle(
-                                              fontSize: 20,
+                                              fontSize: 18,
                                               color: Theme.of(context)
                                                   .colorScheme
                                                   .tertiary,
@@ -188,18 +187,18 @@ class SuccessPage extends StatelessWidget {
                         },
                       ),
                     ),
-              if (additionalInfo != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    additionalInfo!,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                    textAlign: TextAlign.center,
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  additionalInfo!,
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: Theme.of(context).colorScheme.inversePrimary,
                   ),
+                  textAlign: TextAlign.center,
                 ),
+              ),
               const SizedBox(height: 30),
               MyButton(
                   onTap: () {

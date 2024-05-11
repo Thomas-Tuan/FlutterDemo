@@ -15,7 +15,7 @@ class MyDrawerTile extends StatelessWidget {
           text.toUpperCase(),
           style: TextStyle(
               color: Theme.of(context).colorScheme.inversePrimary,
-              fontSize: 22),
+              fontSize: 18),
         ),
         leading: Icon(
           icon,

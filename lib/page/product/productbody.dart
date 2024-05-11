@@ -46,14 +46,14 @@ Widget itemProductView(Product item, BuildContext context) {
                     maxLines: 1,
                     softWrap: false,
                     style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: FontWeight.w500,
                         color: Theme.of(context).colorScheme.inversePrimary),
                   ),
                   Text(
                     Common.formatMoneyCurrency(item.price.toString()),
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.tertiary,
                     ),
@@ -85,7 +85,7 @@ Widget itemProductGridView(
           children: [
             Container(
               width: 150,
-              height: 85,
+              height: 80,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
@@ -99,7 +99,7 @@ Widget itemProductGridView(
                     blurRadius: 5,
                   ),
                 ],
-                color: Theme.of(context).colorScheme.tertiary,
+                color: Theme.of(context).colorScheme.primary,
               ),
               child: Image.network(
                 item.img!,
@@ -114,7 +114,7 @@ Widget itemProductGridView(
               Common.shortText(item.name!, 15),
               softWrap: false,
               style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: Theme.of(context).colorScheme.inversePrimary),
             ),
@@ -122,7 +122,7 @@ Widget itemProductGridView(
               Common.formatMoneyCurrency(item.price!.toString()),
               softWrap: false,
               style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: Theme.of(context).colorScheme.tertiary),
             ),

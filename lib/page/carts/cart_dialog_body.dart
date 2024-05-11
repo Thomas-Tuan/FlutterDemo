@@ -33,7 +33,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                   "",
                   style: TextStyle(
                       color: Theme.of(context).colorScheme.inversePrimary,
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w700),
                 ),
                 IconButton(
@@ -62,14 +62,14 @@ class _CheckoutViewState extends State<CheckoutView> {
                   Text(
                     'Phí giao hàng',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 18,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
                   ),
                   Text(
                     '50.000 Đ',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 18,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
                   ),
@@ -85,7 +85,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                     'Tổng cộng',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 18,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
                   ),
@@ -94,7 +94,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                         (widget.cartProvider.totalPrice + 50000).toString()),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 18,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
                   ),

@@ -82,7 +82,7 @@ class _AccountDetailWidgetState extends State<AccountDetailWidget> {
                     ),
                   ],
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: 32,
+                  fontSize: 22,
                 ),
               ),
               const SizedBox(
@@ -165,7 +165,7 @@ class _AccountDetailWidgetState extends State<AccountDetailWidget> {
                             style: TextStyle(
                               color:
                                   Theme.of(context).colorScheme.inversePrimary,
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

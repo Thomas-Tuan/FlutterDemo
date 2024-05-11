@@ -49,7 +49,7 @@ class _BillWidgetState extends State<BillWidget> {
                   Text(
                     'Không có đơn hàng nào được đặt !',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
                   ),
@@ -109,7 +109,7 @@ class _BillWidgetState extends State<BillWidget> {
                                       Common.formatMoneyCurrency(
                                           product.price.toString()),
                                       style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 18,
                                         color: Theme.of(context)
                                             .colorScheme
                                             .tertiary,
@@ -129,7 +129,7 @@ class _BillWidgetState extends State<BillWidget> {
                                     color: Theme.of(context)
                                         .colorScheme
                                         .inversePrimary,
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold),
                               ),
                             );

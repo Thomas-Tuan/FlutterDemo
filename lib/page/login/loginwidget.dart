@@ -89,7 +89,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     ),
                   ],
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: 32,
+                  fontSize: 22,
                 ),
               ),
               const SizedBox(

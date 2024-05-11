@@ -8,9 +8,9 @@ class MyLocation extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Your location"),
+        title: const Text("Địa chỉ"),
         content: const TextField(
-          decoration: InputDecoration(hintText: "Search ...."),
+          decoration: InputDecoration(hintText: "Tìm kiếm ...."),
         ),
         actions: [
           MaterialButton(
@@ -25,7 +25,7 @@ class MyLocation extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
-                "Exit",
+                "Thoát",
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.inversePrimary,
                 ),
@@ -44,7 +44,7 @@ class MyLocation extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
-                "Save",
+                "Lưu",
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.inversePrimary,
                 ),

@@ -31,7 +31,7 @@ Widget itemQAList(String text, BuildContext context) {
         text,
         style: TextStyle(
           color: Theme.of(context).colorScheme.inversePrimary,
-          fontSize: 16,
+          fontSize: 18,
           fontWeight: FontWeight.w400,
         ),
       ),

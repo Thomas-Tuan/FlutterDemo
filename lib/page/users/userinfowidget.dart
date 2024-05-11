@@ -8,6 +8,7 @@ import 'package:myapp/component/my_drawer.dart';
 import 'package:myapp/conf/const.dart';
 import 'package:myapp/data/model/productmodel.dart';
 import 'package:myapp/data/model/user.dart';
+import 'package:myapp/page/qa_choose_size.dart';
 import 'package:myapp/page/users/detail/user_info_bill.dart';
 import 'package:myapp/page/users/detail/user_info_detail.dart';
 import 'package:myapp/page/users/userinfobody.dart';
@@ -31,12 +32,24 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
   }
 
   List<Product> lstProduct = [];
+  List<Product> filteredProducts = [];
+  TextEditingController searchController = TextEditingController();
   bool isLoading = true;
   Future<void> fetchBill() async {
     final fetchedBill = await APIRepository().fetchBill();
     setState(() {
       isLoading = false;
       lstProduct = fetchedBill;
+    });
+  }
+
+  void _applySearchFilter() {
+    final searchText = searchController.text.toLowerCase();
+    setState(() {
+      filteredProducts = lstProduct.where((product) {
+        bool matchesName = product.name!.toLowerCase().contains(searchText);
+        return matchesName;
+      }).toList();
     });
   }
 
@@ -50,7 +63,10 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: MyAppBar(
+        nameController: searchController,
+        onSearch: (_) => _applySearchFilter(),
+      ),
       drawer: const MyDrawer(),
       body: GradientBackground(
         child: SingleChildScrollView(
@@ -69,7 +85,7 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
                       'Xin chào',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.inversePrimary,
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -80,7 +96,7 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
                       '${user.fullName}',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.inversePrimary,
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -100,7 +116,7 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.tertiary,
                           fontWeight: FontWeight.w400,
-                          fontSize: 20,
+                          fontSize: 18,
                           decoration: TextDecoration.underline,
                           decorationColor:
                               Theme.of(context).colorScheme.tertiary,
@@ -123,7 +139,7 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
                           'Đơn hàng',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.inversePrimary,
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
@@ -134,7 +150,7 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
                           isLoading ? '' : lstProduct.length.toString(),
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.inversePrimary,
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
@@ -152,7 +168,7 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
                             style: TextStyle(
                               color:
                                   Theme.of(context).colorScheme.inversePrimary,
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -203,7 +219,14 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
                 const SizedBox(
                   height: 20,
                 ),
-                itemQAList('Hướng dẫn chọn size', context),
+                GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const QASizeWidget()));
+                    },
+                    child: itemQAList('Hướng dẫn chọn size', context)),
                 Divider(
                   color: Theme.of(context).colorScheme.inversePrimary,
                 ),

@@ -21,9 +21,11 @@ class MyDrawer extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 100.0),
             child: SizedBox(
+              height: 130,
+              width: 150,
               child: Image.asset(
                 '$urlImg' 'logo.png',
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
           ),

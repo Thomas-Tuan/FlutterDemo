@@ -43,32 +43,87 @@ class _MyProductGridListState extends State<MyProductGridList> {
     return lstProduct.isEmpty
         ? Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const SizedBox(
+                  height: 30,
+                ),
                 Text(
                   'Danh sách sản phẩm này chưa được thêm vào  !',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(
+                      context,
+                    );
+                  },
+                  child: Text(
+                    'Quay về danh mục'.toUpperCase(),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 18,
+                      decoration: TextDecoration.underline,
+                      decorationColor: Theme.of(context).colorScheme.tertiary,
+                      decorationThickness: 1,
+                      decorationStyle: TextDecorationStyle.solid,
+                    ),
                   ),
                 ),
               ],
             ),
           )
-        : SizedBox(
-            height: 700,
-            child: GridView.builder(
-                itemCount: lstProduct.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 1,
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 20,
-                  crossAxisCount: 2,
+        : Column(
+            children: [
+              const SizedBox(
+                height: 30,
+              ),
+              SizedBox(
+                height: 700,
+                child: GridView.builder(
+                    itemCount: lstProduct.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 1,
+                      crossAxisSpacing: 15,
+                      mainAxisSpacing: 20,
+                      crossAxisCount: 2,
+                    ),
+                    itemBuilder: (context, idx) {
+                      return itemProductGridView(
+                          lstProduct[idx], context, cartProvider);
+                    }),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(
+                    context,
+                  );
+                },
+                child: Text(
+                  'Quay về danh mục'.toUpperCase(),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 18,
+                    decoration: TextDecoration.underline,
+                    decorationColor: Theme.of(context).colorScheme.tertiary,
+                    decorationThickness: 1,
+                    decorationStyle: TextDecorationStyle.solid,
+                  ),
                 ),
-                itemBuilder: (context, idx) {
-                  return itemProductGridView(
-                      lstProduct[idx], context, cartProvider);
-                }),
+              ),
+            ],
           );
   }
 }

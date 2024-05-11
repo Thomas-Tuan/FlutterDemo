@@ -1,31 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/page/carts/cartwidget.dart';
+import 'package:myapp/page/product/product_filter_name_widget.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  MyAppBar({Key? key}) : super(key: key);
+  final TextEditingController nameController;
+  final Function(String) onSearch;
+  const MyAppBar({
+    Key? key,
+    required this.nameController,
+    required this.onSearch,
+  }) : super(key: key);
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-  final TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Container(
-        height: 50,
+        height: 60,
         padding: const EdgeInsets.symmetric(
-          horizontal: 30,
-          vertical: 5,
+          horizontal: 10,
+          vertical: 10,
         ),
         child: TextField(
+          controller: nameController,
+          onChanged: onSearch,
           decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               hintText: 'Tìm kiếm sản phẩm...',
               filled: true,
               fillColor: Theme.of(context).colorScheme.secondary,
-              prefixIcon: Icon(
-                Icons.search,
-                color: Theme.of(context).colorScheme.inversePrimary,
+              prefixIcon: IconButton(
+                onPressed: () {
+                  final searchText = nameController.text;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ProductFilterWithNameWidget(searchText: searchText),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.search,
+                  size: 30,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
@@ -41,7 +62,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               hintStyle: TextStyle(
                 color: Theme.of(context).colorScheme.inversePrimary,
                 fontWeight: FontWeight.w300,
-                fontSize: 15,
+                fontSize: 17,
               )),
         ),
       ),
@@ -51,7 +72,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               MaterialPageRoute(builder: (context) => const CartWidget())),
           icon: Icon(
             Icons.shopping_bag,
-            size: 40,
+            size: 30,
             color: Theme.of(context).colorScheme.secondary,
           ),
         ),

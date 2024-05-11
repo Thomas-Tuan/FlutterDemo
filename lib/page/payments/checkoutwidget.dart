@@ -5,6 +5,7 @@ import 'package:myapp/conf/common.dart';
 import 'package:myapp/conf/const.dart';
 import 'package:myapp/data/model/productmodel.dart';
 import 'package:myapp/data/provider/cartprovider.dart';
+import 'package:myapp/page/product/detail/product_detail_choose_size.dart';
 import 'package:myapp/page/success_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,13 @@ class PaymentWidget extends StatefulWidget {
 
 class _PaymentWidgetState extends State<PaymentWidget> {
   final TextEditingController noteController = TextEditingController();
+  String? selectedItem;
+  void selectItem(String size) {
+    setState(() {
+      selectedItem = size;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
@@ -40,59 +48,79 @@ class _PaymentWidgetState extends State<PaymentWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 widget.objProduct != null
-                    ? Row(
-                        children: [
-                          SizedBox(
-                            child: Image.network(
-                              widget.objProduct?.img ?? '',
+                    ? Container(
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.secondary,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary,
+                              offset: const Offset(0, 4),
+                              blurRadius: 5,
                             ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.objProduct?.name.toString() ?? '',
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .inversePrimary,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              child: Image.network(
+                                widget.objProduct?.img ?? '',
+                              ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.objProduct?.name.toString() ?? '',
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .inversePrimary,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      Common.formatMoneyCurrency(
-                                        widget.objProduct?.price.toString() ??
-                                            '',
-                                      ),
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .tertiary,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const Text(
-                                      'Số lượng: 1',
-                                      style: TextStyle(
+                                  const SizedBox(
+                                    height: 30,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        Common.formatMoneyCurrency(
+                                          widget.objProduct?.price.toString() ??
+                                              '',
+                                        ),
+                                        style: TextStyle(
                                           fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const Text(
+                                        'Số lượng: 1',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       )
                     : SizedBox(
                         height: 300,
@@ -163,6 +191,9 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold),
                                             ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
                                           ],
                                         ),
                                       ],
@@ -178,6 +209,9 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                   indent: 10,
                   endIndent: 10,
                   color: Theme.of(context).colorScheme.tertiary,
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 TextFormField(
                   controller: noteController,
@@ -210,108 +244,139 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.asset(
-                      '$urlImg' 'voucher.png',
-                      width: 50,
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                    top: BorderSide(
+                      width: 2.0,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
-                    Text(
-                      'Thêm mã giảm giá',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Theme.of(context).colorScheme.inversePrimary,
+                    bottom: BorderSide(
+                      width: 2.0,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  )),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Image.asset(
+                        '$urlImg' 'voucher.png',
+                        width: 50,
                       ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.arrow_forward_ios),
-                      onPressed: () {},
-                    ),
-                  ],
+                      Text(
+                        'Thêm mã giảm giá',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.arrow_forward_ios),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
+                Text(
                   "Chọn phương thức thanh toán",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Theme.of(context).colorScheme.inversePrimary,
+                  ),
                   textAlign: TextAlign.left,
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Theme.of(context).colorScheme.primary),
-                        ),
-                        child: Text(
-                          'Tiền mặt',
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).colorScheme.inversePrimary),
-                        ),
+                      child: SizeCheckBox(
+                        size: 'Tiền mặt',
+                        selectedSize: selectedItem,
+                        onSelect: selectItem,
                       ),
                     ),
                     const SizedBox(
                       width: 16,
                     ),
                     Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Theme.of(context).colorScheme.primary),
-                        ),
-                        child: Text(
-                          'Thanh toán Online',
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).colorScheme.inversePrimary),
-                        ),
+                      child: SizeCheckBox(
+                        size: 'Cổng thanh toán',
+                        selectedSize: selectedItem,
+                        onSelect: selectItem,
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 40,
                 ),
-                const Row(
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: Text("Mã giảm giá"),
+                      child: Text(
+                        "Mã giảm giá",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
+                      ),
                     ),
                     Expanded(
-                      child: Text(textAlign: TextAlign.right, "0đ"),
-                    ),
-                  ],
-                ),
-                const Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Text("Phí giao hàng"),
-                    ),
-                    Expanded(
-                      child: Text(textAlign: TextAlign.right, "50.000đ"),
+                      child: Text(
+                        textAlign: TextAlign.right,
+                        "0đ",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
+                      ),
                     ),
                   ],
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Expanded(
-                      child: Text('Tổng tiền thanh toán',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          )),
+                    Expanded(
+                      child: Text(
+                        "Phí giao hàng",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        textAlign: TextAlign.right,
+                        "50.000đ",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Tổng tiền thanh toán',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
+                      ),
                     ),
                     Expanded(
                       child: Text(
@@ -319,6 +384,7 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                             (cartProvider.totalPrice + 50000).toString()),
                         textAlign: TextAlign.right,
                         style: TextStyle(
+                          fontSize: 18,
                           color: Theme.of(context).colorScheme.tertiary,
                           fontWeight: FontWeight.bold,
                         ),
@@ -329,24 +395,134 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                 const SizedBox(height: 30),
                 MyButton(
                   onTap: () async {
-                    String res =
-                        await handleCheckout(widget.objProduct!, cartProvider);
-                    if (res.contains('ok')) {
-                      // ignore: use_build_context_synchronously
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SuccessPage(
-                              ojbPro: widget.objProduct,
-                              message:
-                                  "Đơn hàng của bạn đã được đặt thành công !",
-                              additionalInfo:
-                                  "Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi !",
-                            ),
-                          ));
-                    }
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        content: Text(
+                          'Bạn có chắc chắn muốn thanh toán?',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
+                        ),
+                        actions: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    String res;
+                                    final objProduct = widget.objProduct;
+                                    if (objProduct != null) {
+                                      res = await handleCheckoutOneItem(
+                                          objProduct);
+                                    } else {
+                                      res = await handleCheckout(cartProvider);
+                                    }
+                                    if (res.contains('ok')) {
+                                      // ignore: use_build_context_synchronously
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => SuccessPage(
+                                              ojbPro: widget.objProduct,
+                                              message:
+                                                  "Đơn hàng của bạn đã được đặt thành công !",
+                                              additionalInfo:
+                                                  "Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi !",
+                                            ),
+                                          ));
+                                    }
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 30,
+                                      vertical: 15,
+                                    ),
+                                    decoration: BoxDecoration(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .inversePrimary,
+                                            offset: const Offset(0, 4),
+                                            blurRadius: 5,
+                                          ),
+                                        ],
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    child: Center(
+                                      child: Text(
+                                        'Có',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .inversePrimary,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 30,
+                                      vertical: 15,
+                                    ),
+                                    decoration: BoxDecoration(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .tertiary,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .inversePrimary,
+                                            offset: const Offset(0, 4),
+                                            blurRadius: 5,
+                                          ),
+                                        ],
+                                        borderRadius:
+                                            BorderRadius.circular(15)),
+                                    child: Center(
+                                      child: Text(
+                                        'Không',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
                   },
-                  text: 'Thanh Toán',
+                  text: 'Thanh Toán'.toUpperCase(),
                 )
               ],
             ),

@@ -3,6 +3,7 @@ import 'package:myapp/auth/login_register.dart';
 import 'package:myapp/component/my_background_gradient.dart';
 import 'package:myapp/data/static/onboardingdata.dart';
 import 'package:myapp/page/onboading_page/onboarding_body.dart';
+import 'package:myapp/page/onboading_page/video_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoardingPage extends StatefulWidget {
@@ -14,6 +15,7 @@ class OnBoardingPage extends StatefulWidget {
 
 class _OnBoardingPageState extends State<OnBoardingPage> {
   final PageController _controller = PageController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,11 +35,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   subTitle: onBoarding[1].subTitle,
                   image: onBoarding[1].image,
                 ),
-                OnBoardingBodyWidget(
-                  title: onBoarding[2].title,
-                  subTitle: onBoarding[2].subTitle,
-                  image: onBoarding[2].image,
-                ),
+                const YoutubePlayerPage(),
               ],
             ),
             Positioned(

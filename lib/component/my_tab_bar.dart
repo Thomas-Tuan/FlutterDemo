@@ -33,7 +33,7 @@ class MyTabBar extends StatelessWidget {
       child: TabBar(
         controller: tabController,
         labelStyle: TextStyle(
-          fontSize: 16,
+          fontSize: 18,
           fontWeight: FontWeight.bold,
           color: Theme.of(context).colorScheme.tertiary,
         ),
